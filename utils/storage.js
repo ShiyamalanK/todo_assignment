@@ -26,4 +26,11 @@ export const loadData = async (key) => {
     }
   };
   
-
+  export const getAllKeys = async () => {
+    try {
+      const keys = await AsyncStorage.getAllKeys();
+      return keys;
+    } catch (e) {
+      console.error('Failed to get all keys:', e);
+    }
+  };
