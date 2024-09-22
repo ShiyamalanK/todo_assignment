@@ -18,4 +18,12 @@ export const loadData = async (key) => {
     }
   };
   
+  export const removeData = async (key) => {
+    try {
+      await AsyncStorage.removeItem(key);
+    } catch (e) {
+      console.error('Failed to remove data:', e);
+    }
+  };
+  
 
