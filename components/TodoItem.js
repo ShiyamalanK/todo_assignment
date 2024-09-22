@@ -1,74 +1,75 @@
 import React from 'react';
-import { View, Text, Button, Switch, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, TouchableOpacity, StyleSheet, CheckBox, Switch} from 'react-native';
+import { colors , colorList, listColors} from '../constants/colors';
+// import { CheckBox } from '@react-native-community/checkbox';
+import Icon from 'react-native-vector-icons/MaterialIcons';
 
+const colorKeys = Object.keys(listColors);
+const colorArray = colorKeys.map(key => listColors[key]);
+export default function TodoItem({ task, onToggle, onDelete, index, onEdit }) {
+  return (
+    <View 
+      style={[styles.container, {backgroundColor: getBackgroundColor(index)}]}    
+    >
+      <Switch
+        value={task.completed}
+        onValueChange={onToggle}
+        trackColor={{false: colors.myTrackColor, true: colors.myTrackColor}}
+        thumbColor={colors.mySwitchThumbColor}
+      />
+      <TouchableOpacity
+        onLongPress={onEdit}
+        onPress={onToggle}
+        style={styles.textBtn}
+      >
+        <Text
+          style={[styles.text, task.completed && styles.completed]}
+          >
+            {task.name.length > 50 ? `${task.name.substring(0,48)}...` : task.name}
+        </Text>
+      </TouchableOpacity>
+      <TouchableOpacity onPress={onDelete}>
+        {/* <Text style={styles.delete}>DELETE</Text> */}
+        <Icon name="delete" size={24} color={colors.myWhite} />
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+const getBackgroundColor = (index) => {
+  return colorArray[index % colorArray.length];
+};
 
 const styles = StyleSheet.create({
-    todoItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingVertical: 10,
-      paddingHorizontal: 15,
-      marginVertical: 5,
-      backgroundColor: '#044',
-      borderRadius: 8,
-      borderWidth: 0.3,
-      borderColor: '#ddd',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: 1 },
-      shadowOpacity: 0.1,
-      shadowRadius: 2,
-      elevation: 2,
-      maxHeight: 75
-    },
-    checkboxContainer: {
-      marginRight: 10,
-    },
-    todoItemText: {
-      flex: 1,
-      fontSize: 16,
-      color: '#eee',
-    },
-    completed: {
-      textDecorationLine: 'line-through',
-      color: '#999',
-    },
-    deleteButton: {
-      backgroundColor: '#f55',
-      paddingVertical: 6,
-      paddingHorizontal: 10,
-      borderRadius: 5,
-      width: 70,
-      height: '100%',
-      alignItems: 'center',
-      justifyContent: 'center'
-    },
-    deleteButtonText: {
-      color: '#fff',
-      fontSize: 14,
-      fontWeight: 'bold'
-    },
-  });
-  
-
-export default function TodoItem({ task, deleteTask, toggleCompleted }) {
-    return (
-        <View style={styles.todoItem}>
-        <View style={styles.checkboxContainer}>
-          <Switch 
-            value={task.completed}
-            onValueChange={() => toggleCompleted(task.id)}
-          />
-        </View>
-        <Text style={[styles.todoItemText, task.completed && styles.completed]}>
-          {task.text}
-        </Text>
-        <TouchableOpacity
-          style={styles.deleteButton}
-          onPress={() => deleteTask(task.id)}
-        >
-          <Text style={styles.deleteButtonText}>Delete</Text>
-        </TouchableOpacity>
-      </View>
-    );
-  }
+  container:{
+    display: 'flex',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
+    height:80,
+    marginVertical: 5,
+    paddingHorizontal: 15,
+    borderRadius: 10,
+  },
+  text: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: colors.myWhite
+  },
+  completed: {
+    textDecorationLine: 'line-through',
+    opacity: 0.5
+  },
+  delete: {
+    color: 'red',
+    marginLeft: 10,
+    fontWeight: 'bold'
+  },
+  textBtn:{
+    flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    padding: 10,
+  },
+});
